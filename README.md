@@ -1,6 +1,4 @@
-## README
-
-### Welcome to [ProteolySee – the human plasma proteolytotype visualizer!](https://ahutz.shinyapps.io/proteolysee/)
+ProteolySee – the human plasma proteolytotype visualizer!
 ====================================================================
 
 This interactive Shiny App allows you to visualize, investigate, and scan the N-terminome data from human SLE patients (PAPERREF: derzeit Proteolytic profiling of human SLE plasma reveals bioactive cleavage products in the human complement system? Demir et al.) in a convenient and accessible way. The presented data is generated using human EDTA-plasma from a cross-sectional SLE cohort and corresponding CTRL samples from the Aarhus University Hospital (in total n=167) and longitudinal, treatment-resolving SLE lupus nephritis (LN) patients from the University Hospital Hamburg-Eppendorf (n=8). Cleaved protein N-termini were identified by mass spectrometry-based high-throughput protein N-termini purification by the High-efficiency Undecanal-based N Termini EnRichment method (HUNTER, Weng, Demir et al., MCP, 2019 – derzeitiger Link: [Link](https://www.sciencedirect.com/science/article/pii/S1535947620317692)).
@@ -8,8 +6,7 @@ This interactive Shiny App allows you to visualize, investigate, and scan the N-
 Contact: Arvid und ich oder Markus?  
 Last update: DATUM
 
-The App is comprised of the following datasets available for filtering/selection in the App:
---------------------------------------------------------------------------------------------
+### The App is comprised of the following datasets available for filtering/selection in the App:
 
 #### Correlation with clinical parameters
 
@@ -35,4 +32,4 @@ Eculizumab-treated pediatric STEC-HUS patients’ EDTA-plasma at 3 timepoints (D
 
 The cross-sectional SLE cohort N-terminome and proteome data was analyzed with the MOFA R package and divided into 10 factors, where factors 1, 3, 5, 7 and 10 were driven by N-termini.
 
-![mofa_factors](mofa.png)
+![mofa_factors](www/mofa.png)
