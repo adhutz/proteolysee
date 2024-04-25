@@ -6,7 +6,6 @@ library(circlize)
 library(DT)
 library(periscope)
 library(stringr)
-# Load necessary packages
 library(cluster)
 library(dplyr)
 library(bsicons)
@@ -51,6 +50,7 @@ server <- function(input, output, session) {
   output$geneSelector <- renderUI({
     selectInput('Gene', 'Gene', selected = "C5", choices = df$Gene, multiple = TRUE, selectize = TRUE)
   })
+  
   output$clinicSelector <- renderUI({
     selectInput('clinic', label = NULL,
                 col_sel$clinic, 
@@ -59,15 +59,7 @@ server <- function(input, output, session) {
                 selectize=TRUE
     )
   })
-  # 
-  # output$countSelector <- renderUI({
-  #   selectInput('count', label = NULL,
-  #               col_sel$count,
-  #               selected = c(""),
-  #               multiple=TRUE,
-  #               selectize=TRUE)
-  # })  
-  
+
   output$lfcSelector <- renderUI({
     selectInput('lfc', 
                 label = NULL,
@@ -76,15 +68,6 @@ server <- function(input, output, session) {
                 multiple=TRUE, 
                 selectize=TRUE)
   }) 
-  
-  output$proteomeSelector <- renderUI({
-    # selectInput('proteome', 
-    #             label = NULL,
-    #             col_sel$proteome, 
-    #             multiple=TRUE, 
-    #             selectize=TRUE)
-    
-  })
   
   output$vitroSelector <- renderUI({
     selectInput('vitro', 
@@ -130,6 +113,7 @@ server <- function(input, output, session) {
   
     return(mat)
   }
+  
   #==============================================================================
   # Observe event to update select input choices dynamically
   #==============================================================================
@@ -289,7 +273,7 @@ observeEvent(input$Gene,{
   
   
   #==============================================================================
-  # Reactive expression to create heatmaps based on non-empty inputs
+  # Function to create heatmaps
   #==============================================================================
   
   plot_heatmap <- function(m, clust, column_title, name, lower, mid, upper){
@@ -311,38 +295,37 @@ observeEvent(input$Gene,{
                             na_col = "grey", border = TRUE,
                             heatmap_legend_param = list(labels_gp = gpar(fontsize = 14), title_gp = gpar(fontsize = 14, fontface = "bold"),  legend_height = unit(40, "mm")))
   }
+  
+  #==============================================================================
+  # Reactive value that creates heatmaps based on non-empty inputs
+  #==============================================================================
 
   ht_list <- reactive({
     heatmaps <- HeatmapList()
 
+    # Check if clustering is selected and create a clustered matrix of the selected columns if true
     if(input$clusteryn){
       clust <- clustering(create_matrix(input$cluster))
     } else{
       clust <- FALSE
     }
 
-
+    # Check if any clinical parameters are selected and create a heatmap if true
     if (length(input$clinic) > 0) {
       m_clinic <- create_matrix(input$clinic)
       hm_clinic <- m_clinic %>% plot_heatmap(clust, "Correlation with clinical parameters", "Clinic", "#88c7fd", "white", "#FFD700")
       heatmaps <- heatmaps + hm_clinic
     }
 
-
+    # Check if any in-vitro parameters are selected and create a heatmap if true
     if (length(input$vitro) > 0) {
       m_vitro <- create_matrix(input$vitro)
       hm_vitro <- m_vitro %>% plot_heatmap(clust, "In-vitro", "In-vitro", "blue",  "white", "red")
 
       heatmaps <- heatmaps+ hm_vitro
     }
-# 
-#     if (length(input$proteome) > 0) {
-#       m_proteome <- create_matrix(input$proteome)
-#       hm_proteome <- m_proteome %>% plot_heatmap(clust, "Proteome",name = "Proteome", "#006400", "white", "#800080")
-# 
-#       heatmaps <- heatmaps+ hm_proteome
-#     }
-    
+
+    # Check if the proteome column is selected and create a heatmap if true
     if (input$proteome) {
             m_proteome <- create_matrix("PROT_SLE_CTRL_CROSS_SECT")
             hm_proteome <- m_proteome %>% plot_heatmap(clust, "Proteome",name = "Proteome", "#006400", "white", "#800080")
@@ -350,6 +333,7 @@ observeEvent(input$Gene,{
             heatmaps <- heatmaps+ hm_proteome
           }
 
+    # Check if any MOFA parameters are selected and create a heatmap if true
     if (length(input$mofa) > 0) {
       m_mofa <- create_matrix(input$mofa)
       hm_mofa <- m_mofa %>% plot_heatmap(clust, "MOFA", "MOFA", "#008B8B", "white", "#FF8C00")
@@ -357,30 +341,31 @@ observeEvent(input$Gene,{
       heatmaps <- heatmaps+ hm_mofa
     }
 
+    # Check if any LFC parameters are selected and create a heatmap if true
     if (length(input$lfc) > 0) {
       m_lfc <- create_matrix(input$lfc)
       hm_lfc <- m_lfc %>% plot_heatmap(clust, "LFC", "LFC", "#00008B", "white", "#8B0000")
 
       heatmaps <- heatmaps+ hm_lfc
     }
+    
+    # Check if any ECU parameters are selected and create a heatmap if true
     if (length(input$ecu) > 0) {
       m_ecu <- create_matrix(input$ecu)
       hm_ecu <- m_ecu %>% plot_heatmap(clust, "ECU", "ECU", "#90ed7b", "white", "#f79edd")
 
       heatmaps <- heatmaps+ hm_ecu
     }
-    # if (length(input$count) > 0) {
-    #   m_count <- create_matrix(input$count)
-    #   hm_count <- m_count %>% plot_heatmap(clust, "Count", "count", "white", "white", "#8c07f2")
-    #   
-    #   heatmaps <- heatmaps+ hm_count
-    # }
+   
+    # Check if the count column is selected and create a heatmap if true
     if(input$count){
       m_count <- create_matrix("total_count")
       hm_count <- m_count %>% plot_heatmap(clust, "Count", "count", "white", "white", "#8c07f2")
 
       heatmaps <- heatmaps+ hm_count
     }
+    
+    # Return the list of heatmaps
     return(heatmaps)
   })
 

@@ -1,0 +1,47 @@
+body{font-size: 14px;}
+
+h4 {font-size: 1.2em; font-weight: bold;}
+
+.flex-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width = 100%;
+}
+
+.selectize-input { word-wrap : break-word;}
+
+.selectize-input { word-break: break-word;}
+
+.selectize-dropdown {word-wrap : break-word;}
+
+.icon-button {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+  padding-top:10px;
+}
+
+.tooltip-inner { max-width: 300px !important; width: max-content !important; text-align: justify; }
+
+.tooltip{font-size: 14px;word-wrap : break-word;}
+
+a:link { 
+  text-decoration: underline;
+  color: black;
+} 
+a:visited { 
+  text-decoration: none;
+  color: black;
+} 
+a:hover { 
+  text-decoration: none;
+  color: grey;
+} 
+a:active { 
+  text-decoration: none; 
+  color: black;
+}"
